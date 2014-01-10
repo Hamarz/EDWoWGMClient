@@ -308,17 +308,14 @@ namespace GMHelper
             uint size = reader.ReadUInt16();
             reader.ReadUInt32();
             int count = reader.ReadUInt16();
-            RealmList[] RealmLists = new RealmList[count];
-            for (int i = 0; i < count; ++i)
-                RealmLists[i] = new RealmList(reader);
 
-            if (count == 1)
+            for (int i = 0; i < count; i++ )
             {
-                Log.Notify("[Logon]:", "Realm selected: {0}", true, RealmLists[0].Name);
-                selectedRealm = RealmLists[0];
+                RealmList realm = new RealmList(reader);
+                Manager.m_WorldServer.AddRealm(realm);
             }
 
-            Manager.m_WorldServer.ConnectToRealm(selectedRealm);
+            Manager.m_WorldServer.ConnectToRealm(Manager.m_WorldServer.GetRealm(0));
         }
         #endregion
     }
