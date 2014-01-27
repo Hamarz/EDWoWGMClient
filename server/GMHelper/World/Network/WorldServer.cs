@@ -107,7 +107,6 @@ namespace GMHelper
         /// Handles incoming Opcodes
         /// </summary>
         Dictionary<Opcodes, PacketHandler> PacketHandlers = new Dictionary<Opcodes, PacketHandler>();
-        List<RealmList> RealmLists = new List<RealmList>();
 
         public WorldServer(string _username)
         {
@@ -158,7 +157,7 @@ namespace GMHelper
         {
             try
             {
-                tcpClient = new TcpClient(realm.Address, realm.Port);
+                tcpClient = new TcpClient(ConfigOptions.Host, ConfigOptions.WorldPort);
 
                 if (DatabaseGlobals.CharacterDB.Initialize(ConfigOptions.CharDBHost, ConfigOptions.CharDBUser, ConfigOptions.CharDBPass, ConfigOptions.CharDBName, ConfigOptions.MySQLPort, true, 5, 150))
                     InfoMessage = "Successfully connected to the database...";
@@ -331,25 +330,6 @@ namespace GMHelper
 
             Interlocked.Add(ref transferred, data.Length);
             Interlocked.Add(ref sent, data.Length);
-        }
-
-        public void AddRealm(RealmList realm)
-        {
-            foreach (RealmList r in RealmLists)
-                if (r == realm) return;
-
-            RealmLists.Add(realm);
-        }
-
-
-        public RealmList GetRealm(string realmName)
-        {
-            return RealmLists.Find(delegate(RealmList i) { return i.Name == realmName; });
-        }
-
-        public RealmList GetRealm(int index)
-        {
-            return RealmLists[index];
         }
     }
 }
